@@ -1,0 +1,16 @@
+FROM node:20
+
+# Definimos el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copiamos package.json y package-lock.json desde src
+COPY src/package*.json ./
+
+# Instalamos TODAS las dependencias (incluyendo devDependencies, ej: nodemon)
+RUN npm install
+
+# Copiamos el resto del código
+COPY src ./
+
+# Comando por defecto → modo dev con nodemon
+CMD ["npm", "run", "dev"]
