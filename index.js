@@ -6,12 +6,15 @@ const port = 3000
 app.use(cors())
 app.use(express.json())
 
-
+// Routers
 const authRouter = require('./routes/auth.routes');
+const userRouter = require('./routes/user.routes');
+const peopleRouter = require('./routes/person.routes');
 
-// moduls
+// Endpoits
 app.use('/auth', authRouter);
-
+app.use('/user', userRouter);
+app.use('/people', peopleRouter);
 
 app.listen(port, () => {console.log(
     `Servidor corriendo en localhost:${port}`
