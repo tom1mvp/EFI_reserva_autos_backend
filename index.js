@@ -10,11 +10,15 @@ app.use(express.json())
 const authRouter = require('./routes/auth.routes');
 const userRouter = require('./routes/user.routes');
 const peopleRouter = require('./routes/person.routes');
+const paymentRouter = require('./routes/payment.routes');
 
 // Endpoits
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/people', peopleRouter);
+app.use('/payment', paymentRouter);
+
+
 
 app.listen(port, () => {console.log(
     `Servidor corriendo en localhost:${port}`
