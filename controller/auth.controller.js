@@ -9,7 +9,7 @@ const { configDotenv } = require('dotenv');
 const register = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const { name, age, gender, birthday, dni, email, phone, username, password, confirm_password, role, is_active } = req.body;
+    const { name, age, gender, birthday, dni, mail, phone, username, password, confirm_password, role, is_active } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({ message: 'Username y password son requeridos' });
@@ -40,7 +40,7 @@ const register = async (req, res) => {
         people_id: new_people.id,
         username,
         password: hashedPassword,
-        email,
+        mail,
         is_active: true,
         role: role || 'customer',
       },

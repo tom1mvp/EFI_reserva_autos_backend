@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     class invoiceDetail extends Model {
         static associate(models) {
             invoiceDetail.belongsTo(models.Invoice, { foreignKey: 'invoice_id' });
+
+            invoiceDetail.belongsTo(models.PriceTable, { foreignKey: 'price_table_id' });
         }
     }
 
@@ -18,7 +20,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-              model: 'INvoice',
+              model: 'Invoice',
+              key: 'id',
+            },
+        },
+
+        price_table_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+              model: 'PriceTable',
               key: 'id',
             },
         },
@@ -40,7 +51,8 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         sequelize,
-        modelName: 'invoiceDetail'
+        modelName: 'invoiceDetail',
+        freezeTableName: true
     });
 
 

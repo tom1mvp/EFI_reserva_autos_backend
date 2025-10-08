@@ -1,15 +1,10 @@
 'use strict';
 
-
-const {
-Model
-} = require('sequelize');
-
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class Invoice extends Model {
         static associate(models) {
-
             Invoice.belongsTo(models.Rental, { foreignKey: 'rental_id' });
             Invoice.hasMany(models.invoiceDetail, { foreignKey: 'invoice_id' });
         }
@@ -20,24 +15,24 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-              model: 'Rentals',
-              key: 'id',
-            },
+                model: 'Rental',
+                key: 'id'
+            }
         },
 
         issue_date: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: false
         },
 
         total: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
         },
 
         status: {
-            type: DataTypes.ENUM('pending','paid','canceld'), 
-            allowNull: false 
+            type: DataTypes.ENUM('pending','paid','canceled'),
+            allowNull: false
         },
 
         is_active: {
@@ -47,8 +42,9 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         sequelize,
-        modelName: 'Invoice'
+        modelName: 'Invoice',
+        freezeTableName: true
     });
 
-    return Invoice
+    return Invoice;
 }

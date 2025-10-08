@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
 
-        email: {
+        mail: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true
@@ -59,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         sequelize,
         modelName: 'User',
+        freezeTableName: true
     });
 
     return User;
