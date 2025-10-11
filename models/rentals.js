@@ -1,74 +1,63 @@
 'use strict';
 
-
-const {
-Model
-} = require('sequelize');
-
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Rentals extends Model {
+    class Rental extends Model {
         static associate(models) {
-            Rentals.belongsTo(models.User, { foreignKey: 'user_id' });
-            Rentals.belongsTo(models.Car, { foreignKey: 'car_id' });
+            Rental.belongsTo(models.User, { foreignKey: 'user_id' });
+            Rental.belongsTo(models.Car, { foreignKey: 'car_id' });
 
-            Rentals.hasMany(models.Invoice, { foreignKey: 'rental_id' });
+            Rental.hasMany(models.Invoice, { foreignKey: 'rental_id' });
         }
     }
 
-    Rentals.init({
+    Rental.init({
         car_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-              model: 'Car',
-              key: 'id',
-            },
+            allowNull: false
         },
 
         user_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-              model: 'User',
-              key: 'id',
-            },
+            allowNull: false
         },
 
         start_date: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: false
         },
 
         completion_date: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: false
         },
 
         daily_rate: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
         },
 
         total: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: false
         },
 
         observation: {
             type: DataTypes.TEXT,
-            allowNull: false,
+            allowNull: true
         },
-
 
         is_active: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         }
+
     }, {
         sequelize,
-        modelName: 'Rental'
+        modelName: 'Rental',
+        freezeTableName: true
     });
 
-    return Rentals
+    return Rental;
 }

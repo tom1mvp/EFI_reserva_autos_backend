@@ -2,10 +2,9 @@ const { Payment } = require('../models');
 const { createInvoiceLogic } = require('../controller/invoice.controller');
 
 const getAllPayment = async (req, res) => {
-    try{
-        const payment = Payment.findAll();
-
-       return res.status(200).json({ status: 200, data: payment });
+    try {
+        const payment = await Payment.findAll();
+        return res.status(200).json({ status: 200, data: payment });
     } catch (error) {
         return res.status(500).json({ status: 500, message: 'Error al buscar los pagos', error: error.message });
     }
@@ -15,7 +14,7 @@ const createPayment = async (req, res) => {
     try {
         const { rental_id, payment_date, amount, payment_method, status, details } = req.body;
 
-        if (!rental_id || !payment_date || !amount || !payment_method || !status) {
+        if (!rental_id || !payment_date || !amount || !payment_method || !status || !details) {
             return res.status(400).json({ status: 400, message: 'Faltan campos obligatorios' });
         }
 
@@ -25,7 +24,7 @@ const createPayment = async (req, res) => {
             status: 'paid',
             details
         });
-
+        
         const new_payment = await Payment.create({
             invoice_id: invoice.id,
             payment_date,
@@ -45,8 +44,7 @@ const createPayment = async (req, res) => {
     }
 };
 
-
 module.exports = {
     getAllPayment,
     createPayment
-}
+};

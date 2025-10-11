@@ -51,7 +51,8 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         sequelize,
-        modelName: 'invoiceDetail'
+        modelName: 'invoiceDetail',
+        freezeTableName: true
     });
 
 

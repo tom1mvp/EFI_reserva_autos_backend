@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         sequelize,
-        modelName: 'PriceTable'
+        modelName: 'PriceTable',
+        freezeTableName: true
     });
 
     return PriceTable

@@ -60,7 +60,8 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         sequelize,
-        modelName: 'Car'
+        modelName: 'Car',
+        freezeTableName: true
     });
 
     return Car

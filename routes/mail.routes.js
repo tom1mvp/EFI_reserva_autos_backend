@@ -4,12 +4,9 @@ const router = express.Router()
 const verifyToken = require('../middlewares/verify_token');
 const isAdmin = require('../middlewares/is_admin')
 
+const { sendMailContact } = require('../controller/mails.controller');
 
-const { getAllPayment, createPayment } = require('../controller/payment.controller');
-
-router.get("/", getAllPayment);
-
-router.post("/",  verifyToken, createPayment);
+router.post('/', verifyToken ,sendMailContact);
 
 
 module.exports = router
