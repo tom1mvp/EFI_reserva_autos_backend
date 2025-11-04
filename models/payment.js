@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-              model: 'INvoice',
+              model: 'Invoice',
               key: 'id',
             },
         },
@@ -50,7 +50,8 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         sequelize,
-        modelName: 'Payment'
+        modelName: 'Payment',
+        freezeTableName: true
     });
 
     return Payment
