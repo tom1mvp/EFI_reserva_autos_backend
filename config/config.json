@@ -1,21 +1,21 @@
 {
   "development": {
-    "username": "tbratik",
-    "password": "15072003",
+    "username": "magg0759",
+    "password": "asdsadas",
     "database": "alquiler_autos",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
-    "username": "tbratik",
-    "password": "15072003",
+    "username": "magg0759",
+    "password": "asdsadas",
     "database": "alquiler_autos",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "production": {
-    "username": "tbratik",
-    "password": "15072003",
+    "username": "magg0759",
+    "password": "asdsadas",
     "database": "alquiler_autos",
     "host": "127.0.0.1",
     "dialect": "postgres"

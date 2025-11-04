@@ -10,7 +10,8 @@ const {
     getUserById,
     getUserByUsername,
     updateUser,
-    deleteUser
+    deleteUser,
+    getPersonByUserId
 } =  require('../controller/user.controller');
 
 
@@ -18,6 +19,8 @@ router.get('/', isAdmin, getAllUser);
 router.get('/username/:username', isAdmin, getUserByUsername)
 router.get('/profile/:id', verifyToken, getUserById);
 
+// Persona asociada a un usuario
+router.get('/:id/person', verifyToken, getPersonByUserId);
 
 router.put('/update/:id', verifyToken, updateUser);
 router.patch('/:id/status', verifyToken ,deleteUser);

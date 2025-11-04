@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
 const app = express();
 const db = require('./models');
 
@@ -7,18 +8,27 @@ const cron = require('node-cron');
 
 
 const port = 3000
-app.use(cors())
+
+// CORS configuration
+const corsOptions = {
+    origin: process.env.FRONT_URL ? process.env.FRONT_URL.split(',') : ['http://localhost:5173', 'http://localhost:3001'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
 app.use(express.json())
 
 
 // database synchronization
 db.sequelize.sync({ alter: true })
-.then(() => {
-    console.log("Base de datos sincronizada con éxito")
-})
-.catch(error => {
-    console.log("Error al sincronizar la base de datos")
-});
+    .then(() => {
+        console.log("Base de datos sincronizada con éxito")
+    })
+    .catch(error => {
+        console.error("Error al sincronizar la base de datos", error);
+    });
 
 
 const { autoFinishRentals } = require('./controller/rental.controller');
@@ -55,4 +65,4 @@ app.listen(port, () => {console.log(
 cron.schedule('0 2 * * *', () => {
     console.log('Ejecutando tarea automática para finalizar alquileres vencidos');
     autoFinishRentals();
-  });
+});

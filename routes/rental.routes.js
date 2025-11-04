@@ -1,13 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { createRental, autoFinishRentals } = require('../controller/rental.controller');
+const { createRental, getRentals, finishRental, autoFinishRentals } = require('../controller/rental.controller');
 
 
 const verifyToken = require('../middlewares/verify_token');
 const isAdmin = require('../middlewares/is_admin');
 
-router.post('/rentals', createRental);
+// Historial de rentals
+router.get('/rentals', verifyToken, getRentals);
 
-router.post('/rentals/:id/finish', autoFinishRentals);
+// Crear rental
+router.post('/rentals', verifyToken, createRental);
+
+// Finalizar manualmente (admin)
+router.post('/rentals/:id/finish', verifyToken, isAdmin, finishRental);
 
 module.exports = router;

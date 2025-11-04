@@ -40,6 +40,79 @@ const createRental = async (req, res) => {
     }
 };
 
+// GET /rental/rentals - historial con filtros
+const getRentals = async (req, res) => {
+  try {
+    const { status, user_id, page = 1, limit = 10 } = req.query;
+    const isAdmin = req.user && req.user.role === 'admin';
+
+    const where = {};
+
+    // Filtro por usuario: si no es admin, forzar su propio id
+    if (isAdmin) {
+      if (user_id) where.user_id = Number(user_id);
+    } else if (req.user && req.user.id) {
+      where.user_id = Number(req.user.id);
+    }
+
+    // Status: active | overdue | finished
+    if (status === 'finished') {
+      where.is_active = false;
+    } else if (status === 'active') {
+      where.is_active = true;
+    } else if (status === 'overdue') {
+      where.is_active = true;
+      where.completion_date = { [Op.lt]: new Date() };
+    }
+
+    const offset = (Number(page) - 1) * Number(limit);
+
+    const rentals = await Rental.findAll({
+      where,
+      order: [['start_date', 'DESC']],
+      offset,
+      limit: Number(limit)
+    });
+
+    // El frontend acepta [] o { data: [] }, devolvemos array directo
+    return res.status(200).json(rentals);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al obtener alquileres', error: error.message });
+  }
+};
+
+// POST /rental/rentals/:id/finish - finalizar manualmente uno
+const finishRental = async (req, res) => {
+  const t = await sequelize.transaction();
+  try {
+    const { id } = req.params;
+
+    const rental = await Rental.findByPk(id, { transaction: t });
+    if (!rental) {
+      await t.rollback();
+      return res.status(404).json({ message: 'Alquiler no encontrado' });
+    }
+
+    if (!rental.is_active) {
+      await t.rollback();
+      return res.status(400).json({ message: 'El alquiler ya está finalizado' });
+    }
+
+    const car = await Car.findByPk(rental.car_id, { transaction: t });
+
+    await rental.update({ is_active: false }, { transaction: t });
+    if (car) {
+      await car.update({ stock: car.stock + 1 }, { transaction: t });
+    }
+
+    await t.commit();
+    return res.status(200).json({ message: 'Alquiler finalizado', data: rental });
+  } catch (error) {
+    await t.rollback();
+    return res.status(500).json({ message: 'Error al finalizar alquiler', error: error.message });
+  }
+};
+
 const autoFinishRentals = async () => {
   const t = await sequelize.transaction();
   try {
@@ -84,4 +157,4 @@ const autoFinishRentals = async () => {
   }
 };
 
-module.exports = { createRental, autoFinishRentals }
+module.exports = { createRental, getRentals, finishRental, autoFinishRentals }

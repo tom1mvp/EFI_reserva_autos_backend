@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, People } = require('../models');
 const bcrypt = require('bcrypt');
 
 // Method's get
@@ -95,10 +95,32 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const getPersonByUserId = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({ status: 404, message: 'Usuario no encontrado' });
+        }
+
+        const person = await People.findByPk(user.people_id);
+        if (!person) {
+            return res.status(404).json({ status: 404, message: 'Persona no encontrada para este usuario' });
+        }
+
+        // El frontend soporta objeto plano o wrapper; devolvemos objeto plano
+        return res.status(200).json(person);
+    } catch (error) {
+        return res.status(500).json({ status: 500, message: 'Error al obtener la persona del usuario', error: error.message });
+    }
+}
+
 module.exports = {
     getAllUser,
     getUserById,
     getUserByUsername,
     updateUser,
-    deleteUser
+    deleteUser,
+    getPersonByUserId
 }
